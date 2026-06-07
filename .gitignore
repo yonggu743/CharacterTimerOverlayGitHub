@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# PyInstaller
+build/
+build_tmp/
+dist/
+*.spec
+
+# Local logs and captures
+*.log
+*.png
+*.jpg
+*.jpeg
+*.bmp
+
+# Local backups generated during reconstruction/tests
+*.backup
+*.bak
+*.before_*
+*.bad_skeleton_backup
+*.manager_backup.json
+*.final_backup.json
+
+# Workspace-local unrelated experiments
+planner/
+tools/keyboard_sim_demo.py
+tools/text_trigger_f.py
+tools/text_trigger_gui.py
+tools/overlay_countdown.py
+tools/virtual_hid_keyboard/
+tools/requirements-screen-reader.txt
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

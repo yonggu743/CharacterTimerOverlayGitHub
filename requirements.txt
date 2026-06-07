@@ -1,0 +1,6 @@
+mss==10.2.0
+numpy==2.4.6
+opencv-python==4.13.0.92
+keyboard==0.13.5
+rapidocr-onnxruntime==1.4.4
+pyinstaller==6.20.0
