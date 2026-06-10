@@ -101,6 +101,7 @@ class TimerState:
     name: str
     label: str
     end_at: float
+    duration: float
 
 
 @dataclass(frozen=True)
@@ -320,17 +321,40 @@ class OverlayLabel:
         font: tuple[str, int, str],
         alpha: float,
     ) -> None:
+        self.fg = fg
+        self.font = font
+        self.alpha = alpha
+        self.transparent = "#ff00ff"
+        self.width = 78
+        self.height = 34
         self.window = tk.Toplevel(root)
         self.window.overrideredirect(True)
         self.window.attributes("-topmost", True)
         self.window.attributes("-alpha", alpha)
-        self.window.configure(bg=bg)
-        self.label = tk.Label(self.window, text="", fg=fg, bg=bg, font=font, padx=8, pady=3)
-        self.label.pack()
+        self.window.configure(bg=self.transparent)
+        try:
+            self.window.attributes("-transparentcolor", self.transparent)
+        except Exception:
+            pass
+        self.canvas = tk.Canvas(
+            self.window,
+            width=self.width,
+            height=self.height,
+            bg=self.transparent,
+            highlightthickness=0,
+            bd=0,
+        )
+        self.canvas.pack()
         self.hide()
 
-    def show(self, text: str, x: int, y: int) -> None:
-        self.label.configure(text=text)
+    def configure_style(self, font_size: int, alpha: float) -> None:
+        self.font = ("Segoe UI", font_size, "bold")
+        self.alpha = alpha
+        self.window.attributes("-alpha", alpha)
+
+    def show(self, text: str, x: int, y: int, progress: float = 1.0) -> None:
+        progress = min(1.0, max(0.0, progress))
+        self._draw(text, progress)
         self.window.deiconify()
         self.window.geometry(f"+{x}+{y}")
         self.window.update_idletasks()
@@ -341,6 +365,54 @@ class OverlayLabel:
 
     def destroy(self) -> None:
         self.window.destroy()
+
+    def _draw(self, text: str, progress: float) -> None:
+        self.canvas.delete("all")
+        w = self.width
+        h = self.height
+        self._round_rect(1, 1, w - 1, h - 1, 10, fill="#101720", outline="#76fff1", width=1)
+        self._round_rect(3, 3, w - 3, h - 3, 8, fill="#172330", outline="#27475a", width=1)
+        self.canvas.create_oval(9, 12, 17, 20, fill="#53fff0", outline="")
+        self.canvas.create_text(
+            47,
+            15,
+            text=text,
+            fill="#66fff4",
+            font=self.font,
+            anchor=tk.CENTER,
+        )
+        bar_x = 12
+        bar_y = h - 8
+        bar_w = w - 24
+        self._round_rect(bar_x, bar_y, bar_x + bar_w, bar_y + 3, 2, fill="#2b3944", outline="")
+        fill_w = max(3, int(bar_w * progress))
+        color = "#65fff1" if progress > 0.28 else "#ffcf5a"
+        self._round_rect(bar_x, bar_y, bar_x + fill_w, bar_y + 3, 2, fill=color, outline="")
+
+    def _round_rect(
+        self,
+        x1: int,
+        y1: int,
+        x2: int,
+        y2: int,
+        radius: int,
+        **kwargs: Any,
+    ) -> None:
+        points = [
+            x1 + radius, y1,
+            x2 - radius, y1,
+            x2, y1,
+            x2, y1 + radius,
+            x2, y2 - radius,
+            x2, y2,
+            x2 - radius, y2,
+            x1 + radius, y2,
+            x1, y2,
+            x1, y2 - radius,
+            x1, y1 + radius,
+            x1, y1,
+        ]
+        self.canvas.create_polygon(points, smooth=True, **kwargs)
 
     def _force_topmost(self) -> None:
         self.window.attributes("-topmost", True)
@@ -361,32 +433,29 @@ class OverlayLabel:
 class BuffPanel:
     def __init__(self, root: tk.Tk, settings: OverlaySettings) -> None:
         self.settings = settings
+        self.transparent = "#ff00ff"
         self.window = tk.Toplevel(root)
         self.window.overrideredirect(True)
         self.window.attributes("-topmost", True)
         self.window.attributes("-alpha", settings.buff_panel_alpha)
-        self.bg = "#101010"
-        self.window.configure(bg=self.bg)
-        self.frame = tk.Frame(self.window, bg=self.bg, padx=8, pady=5)
-        self.frame.pack()
+        self.window.configure(bg=self.transparent)
+        try:
+            self.window.attributes("-transparentcolor", self.transparent)
+        except Exception:
+            pass
+        self.canvas = tk.Canvas(
+            self.window,
+            width=178,
+            height=52,
+            bg=self.transparent,
+            highlightthickness=0,
+            bd=0,
+        )
+        self.canvas.pack()
         self.hide()
 
-    def show(self, rows: list[tuple[str, float]], x: int, y: int) -> None:
-        for child in self.frame.winfo_children():
-            child.destroy()
-        for label, remaining in rows:
-            text = f"{label} {remaining:04.1f}"
-            tk.Label(
-                self.frame,
-                text=text,
-                fg="#ffe66d",
-                bg=self.bg,
-                font=("Segoe UI", self.settings.buff_panel_font_size, "bold"),
-                padx=6,
-                pady=1,
-                anchor=tk.W,
-                justify=tk.LEFT,
-            ).pack(anchor=tk.W, fill=tk.X)
+    def show(self, rows: list[tuple[str, float, float]], x: int, y: int) -> None:
+        self._draw(rows)
         self.window.deiconify()
         self.window.geometry(f"+{x}+{y}")
         self.window.update_idletasks()
@@ -397,6 +466,80 @@ class BuffPanel:
 
     def destroy(self) -> None:
         self.window.destroy()
+
+    def _draw(self, rows: list[tuple[str, float, float]]) -> None:
+        row_h = 28
+        width = 178
+        height = 14 + row_h * len(rows)
+        self.canvas.configure(width=width, height=height)
+        self.canvas.delete("all")
+        self._round_rect(1, 1, width - 1, height - 1, 12, fill="#111620", outline="#f3d46b", width=1)
+        self._round_rect(4, 4, width - 4, height - 4, 10, fill="#1b2230", outline="#3c3440", width=1)
+        self.canvas.create_text(
+            14,
+            12,
+            text="BUFF",
+            fill="#f8dd7c",
+            font=("Segoe UI", 8, "bold"),
+            anchor=tk.W,
+        )
+        for index, (label, remaining, progress) in enumerate(rows):
+            progress = min(1.0, max(0.0, progress))
+            top = 20 + index * row_h
+            self.canvas.create_text(
+                14,
+                top + 10,
+                text=label,
+                fill="#fff3bd",
+                font=("Microsoft YaHei UI", self.settings.buff_panel_font_size, "bold"),
+                anchor=tk.W,
+            )
+            self.canvas.create_text(
+                width - 14,
+                top + 10,
+                text=f"{remaining:04.1f}",
+                fill="#66fff4",
+                font=("Segoe UI", self.settings.buff_panel_font_size, "bold"),
+                anchor=tk.E,
+            )
+            bar_x = 14
+            bar_y = top + 21
+            bar_w = width - 28
+            self._round_rect(bar_x, bar_y, bar_x + bar_w, bar_y + 3, 2, fill="#303640", outline="")
+            self._round_rect(
+                bar_x,
+                bar_y,
+                bar_x + max(4, int(bar_w * progress)),
+                bar_y + 3,
+                2,
+                fill="#f8d86d",
+                outline="",
+            )
+
+    def _round_rect(
+        self,
+        x1: int,
+        y1: int,
+        x2: int,
+        y2: int,
+        radius: int,
+        **kwargs: Any,
+    ) -> None:
+        points = [
+            x1 + radius, y1,
+            x2 - radius, y1,
+            x2, y1,
+            x2, y1 + radius,
+            x2, y2 - radius,
+            x2, y2,
+            x2 - radius, y2,
+            x1 + radius, y2,
+            x1, y2,
+            x1, y2 - radius,
+            x1, y1 + radius,
+            x1, y1,
+        ]
+        self.canvas.create_polygon(points, smooth=True, **kwargs)
 
     def _force_topmost(self) -> None:
         self.window.attributes("-topmost", True)
@@ -826,9 +969,9 @@ class TimerOverlayApp(tk.Tk):
             self.buff_panel.settings = self.settings
             self.buff_panel.window.attributes("-alpha", self.settings.buff_panel_alpha)
             for label in self.cd_labels.values():
-                label.window.attributes("-alpha", self.settings.cd_label_alpha)
-                label.label.configure(
-                    font=("Segoe UI", self.settings.cd_label_font_size, "bold")
+                label.configure_style(
+                    self.settings.cd_label_font_size,
+                    self.settings.cd_label_alpha,
                 )
             if (
                 self.running
@@ -1419,6 +1562,7 @@ class TimerOverlayApp(tk.Tk):
                 name=config.name,
                 label=config.skill_key.upper(),
                 end_at=now + config.skill_cd,
+                duration=config.skill_cd,
             )
         if config.buff_duration > 0 and key == config.buff_key:
             label = config.buff_label or config.name
@@ -1428,6 +1572,7 @@ class TimerOverlayApp(tk.Tk):
                 name=config.name,
                 label=label,
                 end_at=now + config.buff_duration,
+                duration=config.buff_duration,
             )
 
     def _switch_active_slot(self, slot: int, source: str) -> None:
@@ -1483,9 +1628,10 @@ class TimerOverlayApp(tk.Tk):
                 label.hide()
                 continue
             remaining = max(0.0, state.end_at - now)
+            progress = remaining / state.duration if state.duration > 0 else 0.0
             x = max(0, position.x - self.settings.cd_label_left_offset)
-            y = position.y + max(0, position.height // 2 - 14)
-            label.show(f"{remaining:04.1f}", x, y)
+            y = position.y + max(0, position.height // 2 - 18)
+            label.show(f"{remaining:04.1f}", x, y, progress)
 
         for name, label in list(self.cd_labels.items()):
             if name not in self.cooldowns or name not in active_names:
@@ -1497,10 +1643,11 @@ class TimerOverlayApp(tk.Tk):
         if not self.buffs:
             self.buff_panel.hide()
             return
-        rows: list[tuple[str, float]] = []
+        rows: list[tuple[str, float, float]] = []
         for state in sorted(self.buffs.values(), key=lambda item: item.end_at):
             remaining = max(0.0, state.end_at - now)
-            rows.append((state.label, remaining))
+            progress = remaining / state.duration if state.duration > 0 else 0.0
+            rows.append((state.label, remaining, progress))
         if not rows:
             self.buff_panel.hide()
             return

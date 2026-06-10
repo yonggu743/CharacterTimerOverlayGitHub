@@ -1,151 +1,111 @@
-{
-  "default_region": "2175,288,376,480",
-  "characters": {
-    "奈芙尔": {
-      "aliases": [
-        "奈芙尔"
-      ],
-      "skill_key": "e",
-      "skill_cd": 9.0,
-      "buff_duration": 0.0,
-      "buff_label": "",
-      "buff_key": ""
-    },
-    "菈乌玛": {
-      "aliases": [
-        "菈乌玛",
-        "拉乌玛"
-      ],
-      "skill_key": "e",
-      "skill_cd": 12.0,
-      "buff_duration": 0.0,
-      "buff_label": "",
-      "buff_key": ""
-    },
-    "哥伦比娅": {
-      "aliases": [
-        "哥伦比娅"
-      ],
-      "skill_key": "e",
-      "skill_cd": 17.0,
-      "buff_key": "q",
-      "buff_duration": 20.0,
-      "buff_label": "月之领域"
-    },
-    "纳西妲": {
-      "aliases": [
-        "纳西妲"
-      ],
-      "skill_key": "e",
-      "skill_cd": 5.0,
-      "buff_key": "",
-      "buff_duration": 0.0,
-      "buff_label": ""
-    },
-    "玛拉妮": {
-      "aliases": [
-        "玛拉妮"
-      ],
-      "skill_key": "e",
-      "skill_cd": 6.0,
-      "buff_key": "",
-      "buff_duration": 0.0,
-      "buff_label": ""
-    },
-    "希格雯": {
-      "aliases": [
-        "希格雯"
-      ],
-      "skill_key": "e",
-      "skill_cd": 18.0,
-      "buff_duration": 0.0,
-      "buff_label": "",
-      "buff_key": ""
-    },
-    "莫娜": {
-      "aliases": [
-        "莫娜"
-      ],
-      "skill_key": "e",
-      "skill_cd": 12.0,
-      "buff_key": "e",
-      "buff_duration": 20.0,
-      "buff_label": "天美"
-    },
-    "砂糖": {
-      "aliases": [
-        "砂糖"
-      ],
-      "skill_key": "e",
-      "skill_cd": 15.0,
-      "buff_key": "e",
-      "buff_duration": 10.0,
-      "buff_label": "风套"
-    },
-    "玛薇卡": {
-      "aliases": [
-        "玛薇卡"
-      ],
-      "skill_key": "e",
-      "skill_cd": 15.0,
-      "buff_key": "q",
-      "buff_duration": 20.0,
-      "buff_label": "勇者"
-    },
-    "莉奈娅": {
-      "aliases": [
-        "莉奈娅"
-      ],
-      "skill_key": "e",
-      "skill_cd": 18.0,
-      "buff_key": "",
-      "buff_duration": 0.0,
-      "buff_label": ""
-    },
-    "叶洛亚": {
-      "aliases": [
-        "叶洛亚"
-      ],
-      "skill_key": "e",
-      "skill_cd": 15.0,
-      "buff_key": "",
-      "buff_duration": 0.0,
-      "buff_label": ""
-    },
-    "钟离": {
-      "aliases": [
-        "钟离"
-      ],
-      "skill_key": "e",
-      "skill_cd": 12.0,
-      "buff_key": "",
-      "buff_duration": 0.0,
-      "buff_label": ""
-    },
-    "asdadad": {
-      "aliases": [
-        "asdadad"
-      ],
-      "skill_key": "e",
-      "skill_cd": 10.0,
-      "buff_key": "",
-      "buff_duration": 0.0,
-      "buff_label": ""
-    }
-  },
-  "settings": {
-    "min_match_score": 0.58,
-    "ocr_interval": 5,
-    "change_confirm_frames": 3,
-    "change_confirm_interval": 0.25,
-    "party_hold_seconds": 30,
-    "key_debounce_seconds": 0.12,
-    "cd_label_left_offset": 88,
-    "cd_label_font_size": 15,
-    "cd_label_alpha": 0.86,
-    "buff_panel_left_offset": 90,
-    "buff_panel_top_offset": 78,
-    "buff_panel_font_size": 14,
-    "buff_panel_alpha": 0.88
-  }
+﻿{
+    "default_region":  "2175,288,376,480",
+    "characters":  {
+                       "奈芙尔":  {
+                                   "aliases":  [
+                                                   "奈芙尔"
+                                               ],
+                                   "skill_key":  "e",
+                                   "skill_cd":  9.0,
+                                   "buff_duration":  0.0,
+                                   "buff_label":  "",
+                                   "buff_key":  ""
+                               },
+                       "菈乌玛":  {
+                                   "aliases":  [
+                                                   "菈乌玛",
+                                                   "拉乌玛"
+                                               ],
+                                   "skill_key":  "e",
+                                   "skill_cd":  12.0,
+                                   "buff_duration":  0.0,
+                                   "buff_label":  "",
+                                   "buff_key":  ""
+                               },
+                       "哥伦比娅":  {
+                                    "aliases":  [
+                                                    "哥伦比娅"
+                                                ],
+                                    "skill_key":  "e",
+                                    "skill_cd":  17.0,
+                                    "buff_duration":  0.0,
+                                    "buff_label":  "",
+                                    "buff_key":  ""
+                                },
+                       "纳西妲":  {
+                                   "aliases":  [
+                                                   "纳西妲"
+                                               ],
+                                   "skill_key":  "e",
+                                   "skill_cd":  5.0,
+                                   "buff_key":  "",
+                                   "buff_duration":  0.0,
+                                   "buff_label":  ""
+                               },
+                       "玛拉妮":  {
+                                   "aliases":  [
+                                                   "玛拉妮"
+                                               ],
+                                   "skill_key":  "e",
+                                   "skill_cd":  6.0,
+                                   "buff_key":  "",
+                                   "buff_duration":  0.0,
+                                   "buff_label":  ""
+                               },
+                       "希格雯":  {
+                                   "aliases":  [
+                                                   "希格雯"
+                                               ],
+                                   "skill_key":  "e",
+                                   "skill_cd":  18.0,
+                                   "buff_duration":  0.0,
+                                   "buff_label":  "",
+                                   "buff_key":  ""
+                               },
+                       "莫娜":  {
+                                  "aliases":  [
+                                                  "莫娜"
+                                              ],
+                                  "skill_key":  "e",
+                                  "skill_cd":  12.0,
+                                  "buff_key":  "e",
+                                  "buff_duration":  20.0,
+                                  "buff_label":  "天美"
+                              },
+                       "砂糖":  {
+                                  "aliases":  [
+                                                  "砂糖"
+                                              ],
+                                  "skill_key":  "e",
+                                  "skill_cd":  15.0,
+                                  "buff_key":  "e",
+                                  "buff_duration":  10.0,
+                                  "buff_label":  "风套"
+                              },
+                       "玛薇卡":  {
+                                   "aliases":  [
+                                                   "玛薇卡"
+                                               ],
+                                   "skill_key":  "e",
+                                   "skill_cd":  15.0,
+                                   "buff_key":  "q",
+                                   "buff_duration":  20.0,
+                                   "buff_label":  "勇者"
+                               }
+                   },
+    "settings":  {
+                     "min_match_score":  0.58,
+                     "ocr_interval":  5,
+                     "change_confirm_frames":  3,
+                     "change_confirm_interval":  0.25,
+                     "party_hold_seconds":  30,
+                     "key_debounce_seconds":  0.12,
+                     "cd_label_left_offset":  88,
+                     "cd_label_font_size":  15,
+                     "cd_label_alpha":  0.86,
+                     "buff_panel_left_offset":  90,
+                     "buff_panel_top_offset":  78,
+                     "buff_panel_font_size":  14,
+                     "buff_panel_alpha":  0.88
+                 }
 }
