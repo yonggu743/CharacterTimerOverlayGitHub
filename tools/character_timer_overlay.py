@@ -1629,7 +1629,7 @@ class TimerOverlayApp(tk.Tk):
                 continue
             remaining = max(0.0, state.end_at - now)
             progress = remaining / state.duration if state.duration > 0 else 0.0
-            x = max(0, position.x - self.settings.cd_label_left_offset)
+            x = max(0, self.region.left - self.settings.cd_label_left_offset)
             y = position.y + max(0, position.height // 2 - 18)
             label.show(f"{remaining:04.1f}", x, y, progress)
 
